@@ -1,67 +1,60 @@
-# Astro Starter Kit: Blog
+# BK Blog - Theme Customizations
 
-```sh
-npm create astro@latest -- --template blog
+This document outlines the additional functionality and customizations made to the base Astro blog theme.
+
+## Custom Features
+
+### 1. Site Branding
+- Customized site title: "BK Blog"
+- Personalized blog page title: "Blog Posts"
+- Custom site description for better SEO
+
+### 2. Content Structure
+- Organized blog posts under `/blog` route
+- Implemented dynamic routing for blog posts using `[...slug].astro`
+- About page with customizable content and hero image support
+
+### 3. Layout System
+- Enhanced blog post layout with:
+  - Hero image support
+  - Publication date display
+  - Title and description metadata
+  - Responsive design
+
+### 4. Component Organization
+- Modular component structure in `/components` directory
+- Reusable layouts in `/layouts` directory
+- Global styles in `/styles` directory
+
+### 5. Content Management
+- Structured content configuration via `content.config.ts`
+- Centralized constants in `consts.ts` for easy site-wide updates
+- Content collections in `/content` directory
+
+## Getting Started
+
+To modify the theme further:
+
+1. Update site metadata in `src/consts.ts`
+2. Modify layouts in `src/layouts` directory
+3. Add or update components in `src/components`
+4. Create new pages in `src/pages`
+5. Add blog posts to the content collection
+
+## File Structure
+
+```
+src/
+├── components/     # Reusable UI components
+├── content/        # Blog posts and content collections
+├── layouts/        # Page layouts and templates
+├── pages/         # Route pages
+├── styles/        # Global styles
+├── consts.ts      # Global constants
+└── content.config.ts  # Content collection configuration
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/blog)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/blog)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/blog/devcontainer.json)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
-
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Last updated: January 2, 2025
 
 ## Credit
 
