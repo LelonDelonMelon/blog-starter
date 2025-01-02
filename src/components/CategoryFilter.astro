@@ -1,0 +1,47 @@
+---
+interface Props {
+  categories: string[];
+  selectedCategory: string | undefined;
+}
+
+const { categories, selectedCategory } = Astro.props;
+---
+
+<div class="category-filter">
+  <a href="/blog" class={`category-tag ${!selectedCategory ? 'selected' : ''}`}>All</a>
+  {categories.map((category) => (
+    <a
+      href={`/blog?category=${encodeURIComponent(category)}`}
+      class={`category-tag ${category === selectedCategory ? 'selected' : ''}`}
+    >
+      {category}
+    </a>
+  ))}
+</div>
+
+<style>
+  .category-filter {
+    margin: 2rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .category-tag {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    background-color: #f4f4f4;
+    color: #666;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .category-tag:hover {
+    background-color: #e0e0e0;
+  }
+
+  .category-tag.selected {
+    background-color: #4a9eff;
+    color: white;
+  }
+</style>

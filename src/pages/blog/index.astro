@@ -1,0 +1,257 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import CategoryFilter from "../../components/CategoryFilter.astro";
+import { SITE_TITLE, SITE_DESCRIPTION, BLOG_PAGE_TITLE } from "../../consts";
+import { getCollection } from "astro:content";
+import FormattedDate from "../../components/FormattedDate.astro";
+
+// Get all posts and sort them by date
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+//console.log("posts", posts);
+// Get unique categories from all posts
+const categories = [
+  ...new Set(posts.flatMap((post) => post.data.categories || [])),
+].sort();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <style>
+      main {
+        width: 960px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      .blog-header {
+        margin-bottom: 2rem;
+      }
+
+      .blog-header h1 {
+        margin-bottom: 0.5rem;
+      }
+
+      .blog-header p {
+        color: #666;
+      }
+
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      ul li {
+        width: calc(50% - 1rem);
+      }
+
+      ul li * {
+        text-decoration: none;
+        transition: 0.2s ease;
+      }
+
+      ul li img {
+        margin-bottom: 0.5rem;
+        border-radius: 12px;
+      }
+
+      ul li a {
+        display: block;
+      }
+
+      .title {
+        margin: 0;
+        color: rgb(var(--black));
+        line-height: 1;
+      }
+
+      .date {
+        margin: 0;
+        color: rgb(var(--gray));
+      }
+
+      ul li a:hover h4,
+      ul li a:hover .date {
+        color: rgb(var(--accent));
+      }
+
+      ul li a:hover img {
+        box-shadow: var(--box-shadow);
+      }
+
+      .no-posts {
+        text-align: center;
+        padding: 3rem 0;
+        color: #666;
+      }
+
+      .category-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 2rem 0;
+        justify-content: center;
+      }
+
+      .category-tag {
+        background: transparent;
+        border: 1px solid rgba(var(--accent), 0.2);
+        color: rgb(var(--accent));
+        border-radius: 8px;
+        padding: 0.4rem 1rem;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .category-tag:hover {
+        background: rgba(var(--accent), 0.1);
+        border-color: rgba(var(--accent), 0.4);
+        transform: translateY(-1px);
+      }
+
+      .category-tag.selected {
+        background: rgba(var(--accent), 0.1);
+        border: 2px solid rgb(var(--accent));
+        font-weight: 600;
+      }
+
+      @media (max-width: 720px) {
+        ul {
+          gap: 0.5em;
+        }
+        ul li {
+          width: 100%;
+          text-align: center;
+        }
+        .title {
+          font-size: 1.4em;
+        }
+        .blog-page-title {
+          text-align: center;
+          padding-top: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="blog-header">
+        <h1 class="blog-page-title">{BLOG_PAGE_TITLE}</h1>
+        <p>{SITE_DESCRIPTION}</p>
+      </section>
+
+      <div class="category-buttons">
+        <button class="category-tag selected" data-category="all">All</button>
+        {
+          categories.map((category) => (
+            <button class="category-tag" data-category={category}>
+              {category}
+            </button>
+          ))
+        }
+      </div>
+
+      <ul>
+        {
+          posts.map((post) => (
+            <li data-categories={JSON.stringify(post.data.categories || [])}>
+              <a href={`/blog/${post.id.replace(/\.(md|mdx)$/, "")}`}>
+                {post.data.heroImage && (
+                  <img
+                    width={720}
+                    height={360}
+                    src={post.data.heroImage}
+                    alt=""
+                  />
+                )}
+                <h4 class="title">{post.data.title}</h4>
+                <p class="date">
+                  <FormattedDate date={post.data.pubDate} />
+                  {post.data.updatedDate && (
+                    <>
+                      {" "}
+                      (Updated: <FormattedDate date={post.data.updatedDate} />)
+                    </>
+                  )}
+                </p>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="no-posts" style="display: none;">
+        <h3>No posts found for the selected category</h3>
+        <p>Try selecting a different category or view all posts.</p>
+      </div>
+    </main>
+    <Footer />
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const categoryButtons =
+          document.querySelectorAll<HTMLButtonElement>(".category-tag");
+        const posts = document.querySelectorAll<HTMLLIElement>("ul li");
+        const noPostsMessage =
+          document.querySelector<HTMLDivElement>(".no-posts");
+
+        function filterPosts(category: string) {
+          let visiblePosts = 0;
+
+          posts.forEach((post) => {
+            const postCategories = JSON.parse(
+              post.getAttribute("data-categories") || "[]"
+            );
+            if (category === "all" || postCategories.includes(category)) {
+              (post as HTMLElement).style.display = "";
+              visiblePosts++;
+            } else {
+              (post as HTMLElement).style.display = "none";
+            }
+          });
+
+          // Show/hide no posts message
+          if (noPostsMessage) {
+            noPostsMessage.style.display = visiblePosts === 0 ? "" : "none";
+          }
+        }
+
+        // Handle button clicks
+        categoryButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            // Update selected state
+            categoryButtons.forEach((btn) => btn.classList.remove("selected"));
+            button.classList.add("selected");
+
+            // Filter posts
+            const category = button.getAttribute("data-category") || "all";
+            filterPosts(category);
+          });
+        });
+
+        // Check URL parameters for category filter
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryParam = urlParams.get("category");
+        if (categoryParam) {
+          const categoryButton = document.querySelector<HTMLButtonElement>(
+            `[data-category="${categoryParam}"]`
+          );
+          if (categoryButton) {
+            categoryButton.click();
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
