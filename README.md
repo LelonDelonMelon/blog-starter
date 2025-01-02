@@ -1,11 +1,9 @@
-# BK Blog - Theme Customizations
-
-This document outlines the additional functionality and customizations made to the base Astro blog theme.
+# Blog Starter
 
 ## Custom Features
 
 ### 1. Site Branding
-- Customized site title: "BK Blog"
+- Customized site title: "My Blog"
 - Personalized blog page title: "Blog Posts"
 - Custom site description for better SEO
 
